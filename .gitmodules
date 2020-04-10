@@ -1,0 +1,3 @@
+[submodule "packages/vinyl-viewer"]
+	path = packages/vinyl-viewer
+	url = git@github.com:hbock-42/vinyl-viewer.git
