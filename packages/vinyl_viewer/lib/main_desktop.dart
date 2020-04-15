@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart'
 import 'package:flutter/material.dart';
 
 import 'pages/home-page.dart';
+import 'pages/main-page.dart';
 
 void main() {
   debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Material(child: HomePage()),
+      // home: Material(child: HomePage()),
+      home: Material(child: MainPage()),
     );
   }
 }

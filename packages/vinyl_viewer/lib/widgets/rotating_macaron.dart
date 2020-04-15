@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math' as math;
-import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
 import 'package:flutter/widgets.dart';
@@ -85,19 +84,6 @@ class _RotatingMacaronState extends State<RotatingMacaron>
           child: AnimatedBuilder(
             animation: _controller,
             builder: (BuildContext context, Widget child) {
-              // if (recordNotifier.recordState != _currentRecordState) {
-              //   _currentRecordState = recordNotifier.recordState;
-              //   if (_currentRecordState == RecordState.Stop) {
-              //     saveLocaly(widget.file.path);
-              //   }
-              //   if (_currentRecordState == RecordState.Start) {
-              //     _animation = imageEncode.Animation();
-              //   }
-              // }
-              // if (_currentRecordState == RecordState.Start) {
-              //   addFrameToAnimation();
-              // }
-
               if (recordNotifier.recordState == RecordState.Start) {
                 _currentFrameDurationIndex = 0;
                 _totalFrameRecorded = 0;
