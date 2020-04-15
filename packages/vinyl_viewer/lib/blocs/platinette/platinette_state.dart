@@ -24,9 +24,10 @@ class PlatinetteMacaronReady extends PlatinetteState {
 }
 
 class PlatinetteRecording extends PlatinetteState {
-  const PlatinetteRecording();
+  final Macaron macaron;
+  const PlatinetteRecording(this.macaron);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [macaron];
 }
 
 class PlatinetteError extends PlatinetteState {

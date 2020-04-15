@@ -15,6 +15,7 @@ class _RecordableRotatingMacaronState extends State<RecordableRotatingMacaron>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   final GlobalKey _macaronWidgetKey = GlobalKey();
+  PlayerState _prerecordPlayerState;
 
   @override
   void initState() {
@@ -31,19 +32,28 @@ class _RecordableRotatingMacaronState extends State<RecordableRotatingMacaron>
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PlayerBloc, PlayerState>(
-      listener: (context, state) {
-        var playerBloc = context.bloc<PlayerBloc>();
-        if (state is PlayerPlaying) {
-          print("in Play");
-          _controller.duration =
-              Duration(milliseconds: (60 / playerBloc.rpm * 1000).round());
-          _controller.repeat();
-        } else if (state is PlayerPaused) {
-          print("in Pause");
-          _controller.stop(canceled: false);
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<PlayerBloc, PlayerState>(
+          listener: (context, state) {
+            var playerBloc = context.bloc<PlayerBloc>();
+            if (state is PlayerPlaying) {
+              _controller.duration =
+                  Duration(milliseconds: (60 / playerBloc.rpm * 1000).round());
+              _controller.repeat();
+            } else if (state is PlayerPaused) {
+              _controller.stop(canceled: false);
+            }
+          },
+        ),
+        BlocListener<PlatinetteBloc, PlatinetteState>(
+          listener: (context, state) {
+            if (state is PlatinetteRecording) {
+              _prerecordPlayerState = context.bloc<PlayerBloc>().state;
+            }
+          },
+        )
+      ],
       child: BlocBuilder<PlatinetteBloc, PlatinetteState>(
         builder: (BuildContext context, PlatinetteState state) {
           if (state is PlatinetteInitial)

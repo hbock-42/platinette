@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -10,6 +11,8 @@ part 'platinette_event.dart';
 part 'platinette_state.dart';
 
 class PlatinetteBloc extends Bloc<PlatinetteEvent, PlatinetteState> {
+  Macaron _macaron;
+
   @override
   PlatinetteState get initialState => PlatinetteInitial();
 
@@ -30,12 +33,12 @@ class PlatinetteBloc extends Bloc<PlatinetteEvent, PlatinetteState> {
       var macaronFile = await FilePicker.getFile(type: FileType.image);
       if (macaronFile != null) {
         var color = mainColorFromBytes(await macaronFile.readAsBytes());
-        var macaron = Macaron(
+        _macaron = Macaron(
           path: macaronFile.path,
           mainColor: color,
           file: macaronFile,
         );
-        yield PlatinetteMacaronReady(macaron);
+        yield PlatinetteMacaronReady(_macaron);
       } else {
         yield PlatinetteInitial();
       }
@@ -45,6 +48,6 @@ class PlatinetteBloc extends Bloc<PlatinetteEvent, PlatinetteState> {
   }
 
   Stream<PlatinetteState> _record() async* {
-    yield PlatinetteRecording();
+    yield PlatinetteRecording(_macaron);
   }
 }

@@ -36,7 +36,6 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
   Stream<PlayerState> _updateRpm(int rpm) async* {
     _currentRpm = rpm;
-    print("in update");
     if (this.state is PlayerPlaying) {
       yield* _play();
     }

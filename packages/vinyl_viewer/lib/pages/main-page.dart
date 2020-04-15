@@ -21,7 +21,11 @@ class MainPage extends StatelessWidget {
           return Stack(
             children: [
               Container(
-                color: Colors.blue,
+                color: state is PlatinetteMacaronReady
+                    ? state.macaron.mainColor
+                    : state is PlatinetteRecording
+                        ? state.macaron.mainColor
+                        : Colors.blue,
                 child: IntrinsicHeight(
                   child: Column(
                     children: [
