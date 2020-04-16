@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
@@ -6,6 +7,8 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:vinyl_viewer/helpers/image_main_color.dart';
 import 'package:vinyl_viewer/models/macaron.dart';
+
+import 'package:file_chooser/file_chooser.dart';
 
 part 'platinette_event.dart';
 part 'platinette_state.dart';
@@ -30,8 +33,11 @@ class PlatinetteBloc extends Bloc<PlatinetteEvent, PlatinetteState> {
   Stream<PlatinetteState> _getMacaron() async* {
     try {
       yield PlatinettePickingFile();
-      var macaronFile = await FilePicker.getFile(type: FileType.image);
-      if (macaronFile != null) {
+      var fileChooserResult = await showOpenPanel();
+      if (fileChooserResult.canceled) {
+        yield PlatinetteInitial();
+      } else {
+        var macaronFile = File(fileChooserResult.paths.first);
         var color = mainColorFromBytes(await macaronFile.readAsBytes());
         _macaron = Macaron(
           path: macaronFile.path,
@@ -39,9 +45,20 @@ class PlatinetteBloc extends Bloc<PlatinetteEvent, PlatinetteState> {
           file: macaronFile,
         );
         yield PlatinetteMacaronReady(_macaron);
-      } else {
-        yield PlatinetteInitial();
       }
+
+      // var macaronFile = await FilePicker.getFile(type: FileType.image);
+      // if (macaronFile != null) {
+      //   var color = mainColorFromBytes(await macaronFile.readAsBytes());
+      //   _macaron = Macaron(
+      //     path: macaronFile.path,
+      //     mainColor: color,
+      //     file: macaronFile,
+      //   );
+      //   yield PlatinetteMacaronReady(_macaron);
+      // } else {
+      //   yield PlatinetteInitial();
+      // }
     } catch (ex) {
       yield PlatinetteError("Error while picking a file");
     }

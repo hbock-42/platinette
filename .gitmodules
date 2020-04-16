@@ -4,3 +4,6 @@
 [submodule "packages/image"]
 	path = packages/image
 	url = git@github.com:hbock-42/image.git
+[submodule "flutter-desktop-embedding"]
+	path = flutter-desktop-embedding
+	url = git@github.com:google/flutter-desktop-embedding.git
