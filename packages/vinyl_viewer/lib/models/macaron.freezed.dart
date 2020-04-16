@@ -13,15 +13,11 @@ class _$MacaronTearOff {
   const _$MacaronTearOff();
 
   _Macaron call(
-      {@required File file,
-      @required String path,
-      @required Color mainColor,
-      List<Image> frames}) {
+      {@required File file, @required String path, @required Color mainColor}) {
     return _Macaron(
       file: file,
       path: path,
       mainColor: mainColor,
-      frames: frames,
     );
   }
 }
@@ -33,7 +29,6 @@ mixin _$Macaron {
   File get file;
   String get path;
   Color get mainColor;
-  List<Image> get frames;
 
   $MacaronCopyWith<Macaron> get copyWith;
 }
@@ -41,7 +36,7 @@ mixin _$Macaron {
 abstract class $MacaronCopyWith<$Res> {
   factory $MacaronCopyWith(Macaron value, $Res Function(Macaron) then) =
       _$MacaronCopyWithImpl<$Res>;
-  $Res call({File file, String path, Color mainColor, List<Image> frames});
+  $Res call({File file, String path, Color mainColor});
 }
 
 class _$MacaronCopyWithImpl<$Res> implements $MacaronCopyWith<$Res> {
@@ -56,13 +51,11 @@ class _$MacaronCopyWithImpl<$Res> implements $MacaronCopyWith<$Res> {
     Object file = freezed,
     Object path = freezed,
     Object mainColor = freezed,
-    Object frames = freezed,
   }) {
     return _then(_value.copyWith(
       file: file == freezed ? _value.file : file as File,
       path: path == freezed ? _value.path : path as String,
       mainColor: mainColor == freezed ? _value.mainColor : mainColor as Color,
-      frames: frames == freezed ? _value.frames : frames as List<Image>,
     ));
   }
 }
@@ -71,7 +64,7 @@ abstract class _$MacaronCopyWith<$Res> implements $MacaronCopyWith<$Res> {
   factory _$MacaronCopyWith(_Macaron value, $Res Function(_Macaron) then) =
       __$MacaronCopyWithImpl<$Res>;
   @override
-  $Res call({File file, String path, Color mainColor, List<Image> frames});
+  $Res call({File file, String path, Color mainColor});
 }
 
 class __$MacaronCopyWithImpl<$Res> extends _$MacaronCopyWithImpl<$Res>
@@ -87,23 +80,18 @@ class __$MacaronCopyWithImpl<$Res> extends _$MacaronCopyWithImpl<$Res>
     Object file = freezed,
     Object path = freezed,
     Object mainColor = freezed,
-    Object frames = freezed,
   }) {
     return _then(_Macaron(
       file: file == freezed ? _value.file : file as File,
       path: path == freezed ? _value.path : path as String,
       mainColor: mainColor == freezed ? _value.mainColor : mainColor as Color,
-      frames: frames == freezed ? _value.frames : frames as List<Image>,
     ));
   }
 }
 
 class _$_Macaron with DiagnosticableTreeMixin implements _Macaron {
   const _$_Macaron(
-      {@required this.file,
-      @required this.path,
-      @required this.mainColor,
-      this.frames})
+      {@required this.file, @required this.path, @required this.mainColor})
       : assert(file != null),
         assert(path != null),
         assert(mainColor != null);
@@ -114,12 +102,10 @@ class _$_Macaron with DiagnosticableTreeMixin implements _Macaron {
   final String path;
   @override
   final Color mainColor;
-  @override
-  final List<Image> frames;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Macaron(file: $file, path: $path, mainColor: $mainColor, frames: $frames)';
+    return 'Macaron(file: $file, path: $path, mainColor: $mainColor)';
   }
 
   @override
@@ -129,8 +115,7 @@ class _$_Macaron with DiagnosticableTreeMixin implements _Macaron {
       ..add(DiagnosticsProperty('type', 'Macaron'))
       ..add(DiagnosticsProperty('file', file))
       ..add(DiagnosticsProperty('path', path))
-      ..add(DiagnosticsProperty('mainColor', mainColor))
-      ..add(DiagnosticsProperty('frames', frames));
+      ..add(DiagnosticsProperty('mainColor', mainColor));
   }
 
   @override
@@ -143,9 +128,7 @@ class _$_Macaron with DiagnosticableTreeMixin implements _Macaron {
                 const DeepCollectionEquality().equals(other.path, path)) &&
             (identical(other.mainColor, mainColor) ||
                 const DeepCollectionEquality()
-                    .equals(other.mainColor, mainColor)) &&
-            (identical(other.frames, frames) ||
-                const DeepCollectionEquality().equals(other.frames, frames)));
+                    .equals(other.mainColor, mainColor)));
   }
 
   @override
@@ -153,8 +136,7 @@ class _$_Macaron with DiagnosticableTreeMixin implements _Macaron {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(file) ^
       const DeepCollectionEquality().hash(path) ^
-      const DeepCollectionEquality().hash(mainColor) ^
-      const DeepCollectionEquality().hash(frames);
+      const DeepCollectionEquality().hash(mainColor);
 
   @override
   _$MacaronCopyWith<_Macaron> get copyWith =>
@@ -165,8 +147,7 @@ abstract class _Macaron implements Macaron {
   const factory _Macaron(
       {@required File file,
       @required String path,
-      @required Color mainColor,
-      List<Image> frames}) = _$_Macaron;
+      @required Color mainColor}) = _$_Macaron;
 
   @override
   File get file;
@@ -174,8 +155,6 @@ abstract class _Macaron implements Macaron {
   String get path;
   @override
   Color get mainColor;
-  @override
-  List<Image> get frames;
   @override
   _$MacaronCopyWith<_Macaron> get copyWith;
 }

@@ -100,14 +100,15 @@ class _RotatingMacaronState extends State<RotatingMacaron>
                       _totalFrameRecorded++,
                       if (_totalFrameRecorded >= 60)
                         {
-                          _convertFramesToAnimation(widget.file.path)
-                              .then((value) => {
-                                    recordNotifier
-                                        .setRecordState(RecordState.Converting),
-                                    if (playStateController.currentState ==
-                                        PlayState.Play)
-                                      {_controller.repeat()},
-                                  })
+                          _convertFramesToAnimation(widget.file.path).then(
+                            (value) => {
+                              recordNotifier
+                                  .setRecordState(RecordState.Converting),
+                              if (playStateController.currentState ==
+                                  PlayState.Play)
+                                {_controller.repeat()},
+                            },
+                          )
                         }
                       else
                         {

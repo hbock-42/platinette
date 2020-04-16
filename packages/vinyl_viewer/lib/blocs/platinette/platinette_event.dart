@@ -13,3 +13,8 @@ class Record extends PlatinetteEvent {
   @override
   List<Object> get props => [];
 }
+
+class RecordEnded extends PlatinetteEvent {
+  @override
+  List<Object> get props => [];
+}

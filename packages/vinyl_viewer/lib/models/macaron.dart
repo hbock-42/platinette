@@ -12,6 +12,5 @@ abstract class Macaron with _$Macaron {
     @required File file,
     @required String path,
     @required Color mainColor,
-    List<Image> frames,
   }) = _Macaron;
 }

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vinyl_viewer/helpers/image_main_color.dart';
@@ -108,11 +108,15 @@ class HomePage extends StatelessWidget {
   }
 
   loadImage(AFile file, BgColor bgColor) async {
-    File localFile = await FilePicker.getFile(type: FileType.image);
-    file.setFile(localFile);
-    if (localFile != null) {
-      var color = mainColorFromBytes(await file.file.readAsBytes());
-      bgColor.setColor(color);
+    var fileChooserResult = await showOpenPanel();
+    if (fileChooserResult.canceled) {
+    } else {
+      File localFile = File(fileChooserResult.paths.first);
+      file.setFile(localFile);
+      if (localFile != null) {
+        var color = mainColorFromBytes(await file.file.readAsBytes());
+        bgColor.setColor(color);
+      }
     }
   }
 

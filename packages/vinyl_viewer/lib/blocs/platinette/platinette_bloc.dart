@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vinyl_viewer/helpers/image_main_color.dart';
 import 'package:vinyl_viewer/models/macaron.dart';
-
 import 'package:file_chooser/file_chooser.dart';
 
 part 'platinette_event.dart';
@@ -25,6 +24,8 @@ class PlatinetteBloc extends Bloc<PlatinetteEvent, PlatinetteState> {
       yield* _getMacaron();
     } else if (event is Record) {
       yield* _record();
+    } else if (event is RecordEnded) {
+      yield PlatinetteMacaronReady(_macaron);
     }
   }
 
