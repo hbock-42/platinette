@@ -149,7 +149,9 @@ class _RecordableRotatingMacaronState extends State<RecordableRotatingMacaron>
   Future _saveAnimation() async {
     FileChooserResult result;
     do {
-      result = await showSavePanel();
+      result = await showSavePanel(allowedFileTypes: [
+        FileTypeFilterGroup(fileExtensions: ["png"])
+      ]);
       if (result.canceled) {
         // Todo: popup asking if it is ok to loose animation
         print("The animation will be loosed");

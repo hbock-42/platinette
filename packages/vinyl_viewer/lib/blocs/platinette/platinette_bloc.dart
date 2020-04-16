@@ -32,7 +32,9 @@ class PlatinetteBloc extends Bloc<PlatinetteEvent, PlatinetteState> {
   Stream<PlatinetteState> _getMacaron() async* {
     try {
       yield PlatinettePickingFile();
-      var fileChooserResult = await showOpenPanel();
+      var fileChooserResult = await showOpenPanel(allowedFileTypes: [
+        FileTypeFilterGroup(fileExtensions: ["png"])
+      ]);
       if (fileChooserResult.canceled) {
         yield PlatinetteInitial();
       } else {
