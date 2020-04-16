@@ -5,6 +5,7 @@ import 'package:vinyl_viewer/blocs/player/player_bloc.dart';
 import 'package:vinyl_viewer/widgets/button_bar.dart';
 import 'package:vinyl_viewer/widgets/button_hover.dart';
 import 'package:vinyl_viewer/widgets/recordable_rotating_macaron.dart';
+import 'package:vinyl_viewer/widgets/recording_overlay.dart';
 
 class MainPage extends StatelessWidget {
   @override
@@ -42,7 +43,7 @@ class MainPage extends StatelessWidget {
               ),
               if (state is PlatinettePickingFile)
                 Container(color: Colors.grey.withOpacity(0.4)),
-              if (state is PlatinetteRecording) Container(),
+              if (state is PlatinetteRecording) RecordingOverlay(),
             ],
           );
         },
