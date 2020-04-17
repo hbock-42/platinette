@@ -11,7 +11,8 @@ class PlatinetteInitial extends PlatinetteState {
 }
 
 class PlatinettePickingFile extends PlatinetteState {
-  const PlatinettePickingFile();
+  final Macaron macaron;
+  const PlatinettePickingFile({this.macaron});
   @override
   List<Object> get props => [];
 }

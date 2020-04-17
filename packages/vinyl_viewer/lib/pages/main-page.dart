@@ -26,7 +26,10 @@ class MainPage extends StatelessWidget {
                     ? state.macaron.mainColor
                     : state is PlatinetteRecording
                         ? state.macaron.mainColor
-                        : Colors.blue,
+                        : state is PlatinettePickingFile &&
+                                state.macaron != null
+                            ? state.macaron.mainColor
+                            : Colors.blue,
                 child: IntrinsicHeight(
                   child: Column(
                     children: [

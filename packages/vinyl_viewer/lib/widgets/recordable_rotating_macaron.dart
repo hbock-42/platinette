@@ -65,6 +65,9 @@ class _RecordableRotatingMacaronState extends State<RecordableRotatingMacaron>
         builder: (BuildContext context, PlatinetteState state) {
           if (state is PlatinetteInitial)
             return Container(color: Colors.orange);
+          if (state is PlatinettePickingFile && state.macaron != null) {
+            return buildMacaron(context, state.macaron);
+          }
           if (state is PlatinetteMacaronReady) {
             return buildMacaron(context, state.macaron);
           }
