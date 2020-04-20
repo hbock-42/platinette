@@ -56,7 +56,10 @@ class MainPage extends StatelessWidget {
 
   Widget buildButtonBar(BuildContext context, PlatinetteState state) {
     var platinetteBloc = context.bloc<PlatinetteBloc>();
-    return Row(
+    return Wrap(
+      spacing: 0,
+      runSpacing: 10,
+      // return Row(
       children: [
         ButtonHover(
           'get file',

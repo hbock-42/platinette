@@ -146,6 +146,7 @@ class _RecordableRotatingMacaronState extends State<RecordableRotatingMacaron>
         await saveWidgetAsPng(_macaronWidgetKey, pixelRatio: 0.5);
     img.Image decodedImage = img.decodeImage(encodedPng)
       ..duration = frameDuration.inMilliseconds;
+    decodedImage.blendMethod = img.BlendMode.source;
     return decodedImage;
   }
 
@@ -162,6 +163,7 @@ class _RecordableRotatingMacaronState extends State<RecordableRotatingMacaron>
     } while (result.canceled);
     if (!result.canceled) {
       var animation = img.Animation();
+      animation.backgroundColor = 0;
       int maxWidth = 0;
       int maxHeight = 0;
       _frameImages.forEach((image) => {
