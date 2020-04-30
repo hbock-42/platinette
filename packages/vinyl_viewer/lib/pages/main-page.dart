@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:vinyl_viewer/blocs/platinette/platinette_bloc.dart';
 import 'package:vinyl_viewer/blocs/player/player_bloc.dart';
 import 'package:vinyl_viewer/widgets/button_bar.dart';
@@ -61,8 +62,11 @@ class MainPage extends StatelessWidget {
       runSpacing: 10,
       // return Row(
       children: [
-        ButtonHover(
-          'get file',
+        NeumorphicButton(
+          // style: NeumorphicStyle(shape: NeumorphicShape.flat),
+          // boxShape: NeumorphicBoxShape.circle(),
+          // padding: const EdgeInsets.all(12.0),
+          child: Text("Get a macaron"),
           onClick: () => platinetteBloc.add(GetMacaron()),
         ),
         if (state is PlatinetteMacaronReady)
