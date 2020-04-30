@@ -45,10 +45,10 @@ class _RecordableRotatingMacaronState extends State<RecordableRotatingMacaron>
         BlocListener<PlayerBloc, PlayerState>(
           listener: (context, state) {
             var playerBloc = context.bloc<PlayerBloc>();
-            if (state is PlayerPlaying) {
+            if (state is Playing) {
               _controller.duration = _animationDurationFromRpm(playerBloc.rpm);
               _controller.repeat();
-            } else if (state is PlayerPaused) {
+            } else if (state is Paused) {
               _controller.stop(canceled: false);
             }
           },
@@ -83,7 +83,7 @@ class _RecordableRotatingMacaronState extends State<RecordableRotatingMacaron>
                     {
                       _saveAnimation().then(
                         (value) => {
-                          if (_prerecordPlayerState is PlayerPlaying)
+                          if (_prerecordPlayerState is Playing)
                             {
                               _controller.repeat(),
                             },
