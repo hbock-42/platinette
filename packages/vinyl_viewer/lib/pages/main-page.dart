@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -16,13 +18,38 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  double _marginVinyl;
+  double _vinylSize;
+  double _leftMarginPlayerButton;
+  double _playerButtonDiameter;
   double _screenWidth;
   double _screenHeight;
+  bool _isPortrait;
 
   @override
   Widget build(BuildContext context) {
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
+    var minSize = math.min(_screenHeight, _screenWidth);
+    _isPortrait = false;
+    if (_screenWidth / _screenHeight < 3 / 4) {
+      _isPortrait = true;
+      _vinylSize = _screenWidth * 0.9;
+      _marginVinyl = _screenHeight * 0.05;
+      _leftMarginPlayerButton = _screenHeight * 0.05;
+      _playerButtonDiameter = _screenHeight * 0.2;
+    } else if (_screenWidth / _screenHeight < 4 / 3) {
+      _vinylSize = _screenWidth * 0.65;
+      _marginVinyl = _screenWidth * 0.05;
+      _leftMarginPlayerButton = _screenWidth * 0.05;
+      _playerButtonDiameter = _screenWidth * 0.2;
+    } else {
+      _vinylSize = minSize * 0.75;
+      _marginVinyl = minSize * 0.2;
+      _leftMarginPlayerButton = minSize * 0.1;
+      _playerButtonDiameter = minSize * 0.2;
+    }
+    _playerButtonDiameter = math.min(_playerButtonDiameter, 200);
 
     return MultiBlocProvider(
       providers: [
@@ -107,14 +134,18 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildVinyl() {
-    return UnconstrainedBox(
-      child: LimitedBox(
-        maxWidth: _screenWidth * 0.7,
-        maxHeight: _screenHeight * 0.7,
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: Container(
-            color: Colors.blue,
+    return Positioned(
+      top: _isPortrait ? _marginVinyl : null,
+      left: _isPortrait ? _screenWidth * 0.05 : _marginVinyl,
+      child: UnconstrainedBox(
+        child: LimitedBox(
+          maxWidth: _vinylSize,
+          maxHeight: _vinylSize,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              color: Colors.blue,
+            ),
           ),
         ),
       ),
@@ -122,13 +153,25 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildPlayerButton() {
-    double _diameter = 200;
-    return UnconstrainedBox(
-      child: Neumorphic(
-          boxShape: NeumorphicBoxShape.roundRect(
-              borderRadius: BorderRadius.circular(350)),
-          style: AppTheme.neumorphic,
-          child: PlayerButton(diameter: 350, color: AppTheme.whiteFake)),
+    return Positioned(
+      top: _isPortrait
+          ? _marginVinyl + _vinylSize + _leftMarginPlayerButton
+          : null,
+      left: _isPortrait
+          ? (_screenWidth - _playerButtonDiameter) / 2
+          : _marginVinyl + _vinylSize + _leftMarginPlayerButton,
+      child: UnconstrainedBox(
+        child: LimitedBox(
+          maxHeight: 200,
+          maxWidth: 200,
+          child: Neumorphic(
+              boxShape: NeumorphicBoxShape.roundRect(
+                  borderRadius: BorderRadius.circular(_playerButtonDiameter)),
+              style: AppTheme.neumorphic,
+              child: PlayerButton(
+                  diameter: _playerButtonDiameter, color: AppTheme.whiteFake)),
+        ),
+      ),
     );
   }
 }
