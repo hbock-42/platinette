@@ -48,10 +48,10 @@ class _PlayerButtonState extends State<PlayerButton> {
         color: Colors.red,
         child: Stack(alignment: Alignment.center, children: <Widget>[
           _buildBackground(),
-          ..._buildTexts(),
           _buildMiddleCircle(),
           _buildDot(),
           _buildInnerCirle(),
+          ..._buildTexts(),
         ]),
       ),
     );
@@ -70,14 +70,15 @@ class _PlayerButtonState extends State<PlayerButton> {
   }
 
   List<Widget> _buildTexts() {
+    var playerBloc = context.bloc<PlayerBloc>();
     var texts = List<Widget>();
-    texts.add(_buildText("33", 0));
-    texts.add(_buildText("45", 1));
-    texts.add(_buildText("78", 2));
+    texts.add(_buildText("33", 0, () => playerBloc.add(UpdateRpm(33))));
+    texts.add(_buildText("45", 1, () => playerBloc.add(UpdateRpm(45))));
+    texts.add(_buildText("78", 2, () => playerBloc.add(UpdateRpm(78))));
     return texts;
   }
 
-  Widget _buildText(String text, int i) {
+  Widget _buildText(String text, int i, void Function() onPointerUp) {
     return Transform.rotate(
       angle: _getRotationNumbers(i),
       child: Transform.translate(
@@ -87,9 +88,15 @@ class _PlayerButtonState extends State<PlayerButton> {
                 (_textStyle.fontSize / 2) -
                 _textMargin +
                 3),
-        child: Text(
-          text,
-          style: _textStyle,
+        child: Listener(
+          onPointerUp: (_) {
+            print("lol");
+            onPointerUp();
+          },
+          child: Text(
+            text,
+            style: _textStyle,
+          ),
         ),
       ),
     );
@@ -160,19 +167,19 @@ class _PlayerButtonState extends State<PlayerButton> {
 
   void _onPlayerStateChange(BuildContext context, PlayerState state) {
     state.when(
-      initial: () => {},
-      playing: (rpm) => {
-        setState(() {
-          if (rpm == 33) {
-            _positionId = 0;
-          } else if (rpm == 45) {
-            _positionId = 1;
-          } else if (rpm == 78) {
-            _positionId = 2;
-          }
-        })
-      },
+      initial: (rpm) => {setState(() => _mapRpmToPositions(rpm))},
+      playing: (rpm) => {setState(() => _mapRpmToPositions(rpm))},
       paused: () => {},
     );
+  }
+
+  void _mapRpmToPositions(int rpm) {
+    if (rpm == 33) {
+      _positionId = 0;
+    } else if (rpm == 45) {
+      _positionId = 1;
+    } else if (rpm == 78) {
+      _positionId = 2;
+    }
   }
 }

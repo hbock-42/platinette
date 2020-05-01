@@ -12,8 +12,10 @@ T _$identity<T>(T value) => value;
 class _$PlayerStateTearOff {
   const _$PlayerStateTearOff();
 
-  Initial initial() {
-    return const Initial();
+  Initial initial(int rpm) {
+    return Initial(
+      rpm,
+    );
   }
 
   Playing playing(int rpm) {
@@ -33,13 +35,13 @@ const $PlayerState = _$PlayerStateTearOff();
 mixin _$PlayerState {
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result initial(),
+    @required Result initial(int rpm),
     @required Result playing(int rpm),
     @required Result paused(),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result initial(),
+    Result initial(int rpm),
     Result playing(int rpm),
     Result paused(),
     @required Result orElse(),
@@ -76,6 +78,7 @@ class _$PlayerStateCopyWithImpl<$Res> implements $PlayerStateCopyWith<$Res> {
 abstract class $InitialCopyWith<$Res> {
   factory $InitialCopyWith(Initial value, $Res Function(Initial) then) =
       _$InitialCopyWithImpl<$Res>;
+  $Res call({int rpm});
 }
 
 class _$InitialCopyWithImpl<$Res> extends _$PlayerStateCopyWithImpl<$Res>
@@ -85,48 +88,68 @@ class _$InitialCopyWithImpl<$Res> extends _$PlayerStateCopyWithImpl<$Res>
 
   @override
   Initial get _value => super._value as Initial;
+
+  @override
+  $Res call({
+    Object rpm = freezed,
+  }) {
+    return _then(Initial(
+      rpm == freezed ? _value.rpm : rpm as int,
+    ));
+  }
 }
 
 class _$Initial implements Initial {
-  const _$Initial();
+  const _$Initial(this.rpm) : assert(rpm != null);
+
+  @override
+  final int rpm;
 
   @override
   String toString() {
-    return 'PlayerState.initial()';
+    return 'PlayerState.initial(rpm: $rpm)';
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is Initial);
+    return identical(this, other) ||
+        (other is Initial &&
+            (identical(other.rpm, rpm) ||
+                const DeepCollectionEquality().equals(other.rpm, rpm)));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(rpm);
+
+  @override
+  $InitialCopyWith<Initial> get copyWith =>
+      _$InitialCopyWithImpl<Initial>(this, _$identity);
 
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result initial(),
+    @required Result initial(int rpm),
     @required Result playing(int rpm),
     @required Result paused(),
   }) {
     assert(initial != null);
     assert(playing != null);
     assert(paused != null);
-    return initial();
+    return initial(rpm);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result initial(),
+    Result initial(int rpm),
     Result playing(int rpm),
     Result paused(),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (initial != null) {
-      return initial();
+      return initial(rpm);
     }
     return orElse();
   }
@@ -161,7 +184,10 @@ class _$Initial implements Initial {
 }
 
 abstract class Initial implements PlayerState {
-  const factory Initial() = _$Initial;
+  const factory Initial(int rpm) = _$Initial;
+
+  int get rpm;
+  $InitialCopyWith<Initial> get copyWith;
 }
 
 abstract class $PlayingCopyWith<$Res> {
@@ -218,7 +244,7 @@ class _$Playing implements Playing {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result initial(),
+    @required Result initial(int rpm),
     @required Result playing(int rpm),
     @required Result paused(),
   }) {
@@ -231,7 +257,7 @@ class _$Playing implements Playing {
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result initial(),
+    Result initial(int rpm),
     Result playing(int rpm),
     Result paused(),
     @required Result orElse(),
@@ -312,7 +338,7 @@ class _$Paused implements Paused {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result initial(),
+    @required Result initial(int rpm),
     @required Result playing(int rpm),
     @required Result paused(),
   }) {
@@ -325,7 +351,7 @@ class _$Paused implements Paused {
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result initial(),
+    Result initial(int rpm),
     Result playing(int rpm),
     Result paused(),
     @required Result orElse(),

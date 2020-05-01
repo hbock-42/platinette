@@ -13,7 +13,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   int get rpm => _currentRpm;
 
   @override
-  PlayerState get initialState => PlayerState.initial();
+  PlayerState get initialState => PlayerState.initial(33);
 
   @override
   Stream<PlayerState> mapEventToState(
@@ -24,6 +24,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     } else if (event is Pause) {
       yield* _pause();
     } else if (event is UpdateRpm) {
+      print("OULALALA");
       yield* _updateRpm(event.rpm);
     }
   }
@@ -40,13 +41,15 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     _currentRpm = rpm;
     if (this.state is Playing) {
       yield* _play();
+    } else if (!(this.state is Paused)) {
+      yield PlayerState.initial(rpm);
     }
   }
 }
 
 @freezed
 abstract class PlayerState with _$PlayerState {
-  const factory PlayerState.initial() = Initial;
+  const factory PlayerState.initial(@Default(33) int rpm) = Initial;
   const factory PlayerState.playing(int rpm) = Playing;
   const factory PlayerState.paused() = Paused;
 }
