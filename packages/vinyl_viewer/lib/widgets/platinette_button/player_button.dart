@@ -46,26 +46,27 @@ class _PlayerButtonState extends State<PlayerButton> {
       listener: _onPlayerStateChange,
       child: Container(
         color: Colors.red,
-        child: Stack(alignment: Alignment.center, children: <Widget>[
-          _buildBackground(),
-          _buildMiddleCircle(),
-          _buildDot(),
-          _buildInnerCirle(),
-          ..._buildTexts(),
-        ]),
+        child: UnconstrainedBox(
+          child: LimitedBox(
+            maxWidth: widget.diameter,
+            maxHeight: widget.diameter,
+            child: Stack(alignment: Alignment.center, children: <Widget>[
+              _buildBackground(),
+              _buildMiddleCircle(),
+              _buildDot(),
+              _buildInnerCirle(),
+              ..._buildTexts(),
+            ]),
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildBackground() {
-    return SizedBox(
-      width: widget.diameter,
-      height: widget.diameter,
-      child: Container(
-        decoration: BoxDecoration(
-            color: _color1,
-            borderRadius: BorderRadius.circular(widget.diameter)),
-      ),
+    return Container(
+      decoration: BoxDecoration(
+          color: _color1, borderRadius: BorderRadius.circular(widget.diameter)),
     );
   }
 
