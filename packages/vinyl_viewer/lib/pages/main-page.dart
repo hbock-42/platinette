@@ -10,9 +10,20 @@ import 'package:vinyl_viewer/widgets/platinette_button/player_button.dart';
 import 'package:vinyl_viewer/widgets/recordable_rotating_macaron.dart';
 import 'package:vinyl_viewer/widgets/recording_overlay.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  double _screenWidth;
+  double _screenHeight;
+
   @override
   Widget build(BuildContext context) {
+    _screenWidth = MediaQuery.of(context).size.width;
+    _screenHeight = MediaQuery.of(context).size.height;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<PlatinetteBloc>(
@@ -21,12 +32,12 @@ class MainPage extends StatelessWidget {
             create: (BuildContext context) => PlayerBloc()),
       ],
       // child: Container(),
-      child: UnconstrainedBox(
-        child: Neumorphic(
-            boxShape: NeumorphicBoxShape.roundRect(
-                borderRadius: BorderRadius.circular(350)),
-            style: AppTheme.neumorphic,
-            child: PlayerButton(diameter: 350, dotDiameter: 45)),
+      child: Stack(
+        alignment: Alignment.centerLeft,
+        children: <Widget>[
+          _buildVinyl(),
+          _buildPlayerButton(),
+        ],
       ),
       //   child: BlocBuilder<PlatinetteBloc, PlatinetteState>(
       //     builder: (BuildContext context, PlatinetteState state) {
@@ -92,6 +103,32 @@ class MainPage extends StatelessWidget {
             ],
           )
       ],
+    );
+  }
+
+  Widget _buildVinyl() {
+    return UnconstrainedBox(
+      child: LimitedBox(
+        maxWidth: _screenWidth * 0.7,
+        maxHeight: _screenHeight * 0.7,
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            color: Colors.blue,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlayerButton() {
+    double _diameter = 200;
+    return UnconstrainedBox(
+      child: Neumorphic(
+          boxShape: NeumorphicBoxShape.roundRect(
+              borderRadius: BorderRadius.circular(350)),
+          style: AppTheme.neumorphic,
+          child: PlayerButton(diameter: 350, color: AppTheme.whiteFake)),
     );
   }
 }

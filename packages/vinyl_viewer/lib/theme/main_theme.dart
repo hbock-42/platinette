@@ -5,7 +5,6 @@ class AppTheme {
   static const Color red = const Color.fromRGBO(246, 88, 106, 1);
   static const Color blue = const Color.fromRGBO(120, 148, 196, 1);
   static const Color whiteFake = const Color.fromRGBO(236, 240, 240, 1);
-  // static const Color whiteFake = const Color.fromRGBO(226, 230, 230, 1);
   static final BorderRadius borderRadius = BorderRadius.circular(6);
 
   static TextTheme whiteText = TextTheme(

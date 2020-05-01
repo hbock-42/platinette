@@ -2,25 +2,23 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vinyl_viewer/blocs/player/player_bloc.dart';
-import 'package:vinyl_viewer/theme/main_theme.dart';
 import 'package:vinyl_viewer/widgets/need_make_package/animated_rotation.dart';
 
 class PlayerButton extends StatefulWidget {
   final double diameter;
-  final double dotDiameter;
+  final Color color;
 
   const PlayerButton({
     Key key,
     this.diameter,
-    this.dotDiameter,
+    this.color,
   }) : super(key: key);
   @override
   _PlayerButtonState createState() => _PlayerButtonState();
 }
 
 class _PlayerButtonState extends State<PlayerButton> {
-  static const Color _color1 = AppTheme.whiteFake;
-  static TextStyle _textStyle = TextStyle(
+  TextStyle _textStyle = TextStyle(
     color: Color(0xFFF4F8F8),
     fontSize: 55,
     shadows: [
@@ -30,19 +28,24 @@ class _PlayerButtonState extends State<PlayerButton> {
           offset: const Offset(0, 1))
     ],
   );
-  static const double _textMargin = 10;
+  double _textMargin;
   double _middleCircleDiameter;
+  double _innerCircleDiameter;
+  double _dotDiameter;
+  double _fontSize;
   int _positionId = 0;
 
   @override
   void initState() {
     assert(widget.diameter != null && widget.diameter >= 0);
-    assert(widget.dotDiameter != null && widget.dotDiameter >= 0);
+    assert(widget.color != null);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _calculeSizes();
+
     return BlocListener<PlayerBloc, PlayerState>(
       listener: _onPlayerStateChange,
       child: UnconstrainedBox(
@@ -61,10 +64,20 @@ class _PlayerButtonState extends State<PlayerButton> {
     );
   }
 
+  void _calculeSizes() {
+    _middleCircleDiameter = widget.diameter * 0.583;
+    _innerCircleDiameter = widget.diameter * 0.345;
+    _dotDiameter = (_middleCircleDiameter - _innerCircleDiameter) / 2;
+    _fontSize = 0.171 * widget.diameter;
+    _textStyle = _textStyle.copyWith(fontSize: _fontSize);
+    _textMargin = 0.032 * widget.diameter;
+  }
+
   Widget _buildBackground() {
     return Container(
       decoration: BoxDecoration(
-          color: _color1, borderRadius: BorderRadius.circular(widget.diameter)),
+          color: widget.color,
+          borderRadius: BorderRadius.circular(widget.diameter)),
     );
   }
 
@@ -99,8 +112,6 @@ class _PlayerButtonState extends State<PlayerButton> {
   }
 
   Widget _buildMiddleCircle() {
-    _middleCircleDiameter =
-        widget.diameter - (2 * _textStyle.fontSize + 4 * _textMargin) + 2 * 9;
     return SizedBox(
       width: _middleCircleDiameter,
       height: _middleCircleDiameter,
@@ -113,14 +124,13 @@ class _PlayerButtonState extends State<PlayerButton> {
   }
 
   Widget _buildInnerCirle() {
-    double diameter = _middleCircleDiameter - widget.dotDiameter * 2;
     return SizedBox(
-      width: diameter,
-      height: diameter,
+      width: _innerCircleDiameter,
+      height: _innerCircleDiameter,
       child: Container(
         decoration: BoxDecoration(
-            color: _color1,
-            borderRadius: BorderRadius.circular(diameter),
+            color: widget.color,
+            borderRadius: BorderRadius.circular(_innerCircleDiameter),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.2),
@@ -138,14 +148,14 @@ class _PlayerButtonState extends State<PlayerButton> {
       duration: Duration(milliseconds: 1500),
       angle: math.pi * 2 * _positionId / 3 + math.pi,
       child: Transform.translate(
-        offset: Offset(0, _middleCircleDiameter / 2 - widget.dotDiameter / 2),
+        offset: Offset(0, _middleCircleDiameter / 2 - _dotDiameter / 2),
         child: SizedBox(
-          width: widget.dotDiameter,
-          height: widget.dotDiameter,
+          width: _dotDiameter,
+          height: _dotDiameter,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.black,
-              borderRadius: BorderRadius.circular(widget.dotDiameter),
+              borderRadius: BorderRadius.circular(_dotDiameter),
             ),
           ),
         ),
