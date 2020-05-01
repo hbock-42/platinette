@@ -24,7 +24,6 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     } else if (event is Pause) {
       yield* _pause();
     } else if (event is UpdateRpm) {
-      print("OULALALA");
       yield* _updateRpm(event.rpm);
     }
   }

@@ -89,10 +89,7 @@ class _PlayerButtonState extends State<PlayerButton> {
                 _textMargin +
                 3),
         child: Listener(
-          onPointerUp: (_) {
-            print("lol");
-            onPointerUp();
-          },
+          onPointerUp: (_) => onPointerUp(),
           child: Text(
             text,
             style: _textStyle,
@@ -138,6 +135,7 @@ class _PlayerButtonState extends State<PlayerButton> {
 
   Widget _buildDot() {
     return AnimatedRotation(
+      curve: Curves.bounceIn,
       duration: Duration(milliseconds: 500),
       angle: math.pi * 2 * _positionId / 3 + math.pi,
       child: Transform.translate(
