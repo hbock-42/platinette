@@ -78,8 +78,8 @@ class AppTheme {
 
   static NeumorphicStyle neumorphic = NeumorphicStyle(
     shape: NeumorphicShape.flat,
-    depth: 13,
+    depth: 10,
     lightSource: LightSource.topLeft,
-    intensity: 1,
+    intensity: 0.88,
   );
 }

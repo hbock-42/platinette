@@ -124,9 +124,6 @@ class _MainPageState extends State<MainPage> {
       // return Row(
       children: [
         NeumorphicButton(
-          // style: NeumorphicStyle(shape: NeumorphicShape.flat),
-          // boxShape: NeumorphicBoxShape.circle(),
-          // padding: const EdgeInsets.all(12.0),
           child: Text("Get a macaron"),
           onClick: () => platinetteBloc.add(GetMacaron()),
         ),
@@ -197,7 +194,11 @@ class _MainPageState extends State<MainPage> {
       child: Container(
         width: _otherButtonsDiameter,
         height: _otherButtonsDiameter,
-        color: Colors.red,
+        child: Neumorphic(
+          boxShape: NeumorphicBoxShape.roundRect(
+              borderRadius: BorderRadius.circular(_playerButtonDiameter)),
+          style: AppTheme.neumorphic,
+        ),
       ),
     ));
 
@@ -211,7 +212,11 @@ class _MainPageState extends State<MainPage> {
       child: Container(
         width: _otherButtonsDiameter,
         height: _otherButtonsDiameter,
-        color: Colors.yellow,
+        child: Neumorphic(
+          boxShape: NeumorphicBoxShape.roundRect(
+              borderRadius: BorderRadius.circular(_playerButtonDiameter)),
+          style: AppTheme.neumorphic,
+        ),
       ),
     ));
     return _buttons;
