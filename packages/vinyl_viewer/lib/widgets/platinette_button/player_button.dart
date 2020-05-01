@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vinyl_viewer/blocs/player/player_bloc.dart';
+import 'package:vinyl_viewer/theme/main_theme.dart';
 import 'package:vinyl_viewer/widgets/need_make_package/animated_rotation.dart';
 
 class PlayerButton extends StatefulWidget {
@@ -18,7 +19,7 @@ class PlayerButton extends StatefulWidget {
 }
 
 class _PlayerButtonState extends State<PlayerButton> {
-  static const Color _color1 = Color(0xFFECF0F0);
+  static const Color _color1 = AppTheme.whiteFake;
   static TextStyle _textStyle = TextStyle(
     color: Color(0xFFF4F8F8),
     fontSize: 55,
@@ -44,20 +45,17 @@ class _PlayerButtonState extends State<PlayerButton> {
   Widget build(BuildContext context) {
     return BlocListener<PlayerBloc, PlayerState>(
       listener: _onPlayerStateChange,
-      child: Container(
-        color: Colors.red,
-        child: UnconstrainedBox(
-          child: LimitedBox(
-            maxWidth: widget.diameter,
-            maxHeight: widget.diameter,
-            child: Stack(alignment: Alignment.center, children: <Widget>[
-              _buildBackground(),
-              _buildMiddleCircle(),
-              _buildDot(),
-              _buildInnerCirle(),
-              ..._buildTexts(),
-            ]),
-          ),
+      child: UnconstrainedBox(
+        child: LimitedBox(
+          maxWidth: widget.diameter,
+          maxHeight: widget.diameter,
+          child: Stack(alignment: Alignment.center, children: <Widget>[
+            _buildBackground(),
+            _buildMiddleCircle(),
+            _buildDot(),
+            _buildInnerCirle(),
+            ..._buildTexts(),
+          ]),
         ),
       ),
     );

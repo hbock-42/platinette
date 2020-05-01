@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class AppTheme {
   static const Color red = const Color.fromRGBO(246, 88, 106, 1);
   static const Color blue = const Color.fromRGBO(120, 148, 196, 1);
-  static const Color whiteFake = const Color.fromRGBO(245, 247, 252, 1);
+  static const Color whiteFake = const Color.fromRGBO(236, 240, 240, 1);
+  // static const Color whiteFake = const Color.fromRGBO(226, 230, 230, 1);
   static final BorderRadius borderRadius = BorderRadius.circular(6);
 
   static TextTheme whiteText = TextTheme(
@@ -73,5 +75,12 @@ class AppTheme {
       fontSize: 15,
       fontWeight: FontWeight.w500,
     ),
+  );
+
+  static NeumorphicStyle neumorphic = NeumorphicStyle(
+    shape: NeumorphicShape.flat,
+    depth: 13,
+    lightSource: LightSource.topLeft,
+    intensity: 1,
   );
 }

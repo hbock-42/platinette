@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:vinyl_viewer/blocs/platinette/platinette_bloc.dart';
 import 'package:vinyl_viewer/blocs/player/player_bloc.dart';
+import 'package:vinyl_viewer/theme/main_theme.dart';
 import 'package:vinyl_viewer/widgets/button_bar.dart';
 import 'package:vinyl_viewer/widgets/button_hover.dart';
 import 'package:vinyl_viewer/widgets/platinette_button/player_button.dart';
@@ -20,7 +21,13 @@ class MainPage extends StatelessWidget {
             create: (BuildContext context) => PlayerBloc()),
       ],
       // child: Container(),
-      child: PlayerButton(diameter: 350, dotDiameter: 45),
+      child: UnconstrainedBox(
+        child: Neumorphic(
+            boxShape: NeumorphicBoxShape.roundRect(
+                borderRadius: BorderRadius.circular(350)),
+            style: AppTheme.neumorphic,
+            child: PlayerButton(diameter: 350, dotDiameter: 45)),
+      ),
       //   child: BlocBuilder<PlatinetteBloc, PlatinetteState>(
       //     builder: (BuildContext context, PlatinetteState state) {
       //       return Stack(
