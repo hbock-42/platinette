@@ -135,8 +135,8 @@ class _PlayerButtonState extends State<PlayerButton> {
 
   Widget _buildDot() {
     return AnimatedRotation(
-      curve: Curves.bounceIn,
-      duration: Duration(milliseconds: 500),
+      curve: Curves.elasticOut,
+      duration: Duration(milliseconds: 1500),
       angle: math.pi * 2 * _positionId / 3 + math.pi,
       child: Transform.translate(
         offset: Offset(0, _middleCircleDiameter / 2 - widget.dotDiameter / 2),
