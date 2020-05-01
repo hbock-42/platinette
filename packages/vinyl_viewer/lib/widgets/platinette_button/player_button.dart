@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vinyl_viewer/blocs/player/player_bloc.dart';
 import 'package:vinyl_viewer/widgets/need_make_package/animated_rotation.dart';
 
+import '../lottie_button.dart';
+
 class PlayerButton extends StatefulWidget {
   final double diameter;
   final Color color;
@@ -33,6 +35,7 @@ class _PlayerButtonState extends State<PlayerButton> {
   double _innerCircleDiameter;
   double _dotDiameter;
   double _fontSize;
+  double _playPauseHeight;
   int _positionId = 0;
 
   @override
@@ -58,6 +61,7 @@ class _PlayerButtonState extends State<PlayerButton> {
             _buildDot(),
             _buildInnerCirle(),
             ..._buildTexts(),
+            _buildPlayPauseButton(),
           ]),
         ),
       ),
@@ -71,6 +75,7 @@ class _PlayerButtonState extends State<PlayerButton> {
     _fontSize = 0.171 * widget.diameter;
     _textStyle = _textStyle.copyWith(fontSize: _fontSize);
     _textMargin = 0.032 * widget.diameter;
+    _playPauseHeight = widget.diameter * 0.2;
   }
 
   Widget _buildBackground() {
@@ -160,6 +165,17 @@ class _PlayerButtonState extends State<PlayerButton> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildPlayPauseButton() {
+    var playerBloc = context.bloc<PlayerBloc>();
+    return LottieButton(
+      // onClick1: () => playerBloc.add(Pause()),
+      // onClick2: () => playerBloc.add(Play()),
+      isFirstStatefirst: false,
+      compositionPath: 'assets/animations/play_pause.json',
+      height: _playPauseHeight,
     );
   }
 
