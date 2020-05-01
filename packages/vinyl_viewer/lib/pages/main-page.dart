@@ -22,8 +22,11 @@ class _MainPageState extends State<MainPage> {
   double _vinylSize;
   double _leftMarginPlayerButton;
   double _playerButtonDiameter;
+  double _otherButtonsDiameter;
   double _screenWidth;
   double _screenHeight;
+  double _topPlayerButton;
+  double _leftPlayerButton;
   bool _isPortrait;
 
   @override
@@ -49,7 +52,16 @@ class _MainPageState extends State<MainPage> {
       _leftMarginPlayerButton = minSize * 0.1;
       _playerButtonDiameter = minSize * 0.2;
     }
+
+    _topPlayerButton = _isPortrait
+        ? _marginVinyl + _vinylSize + _leftMarginPlayerButton
+        : null;
+    _leftPlayerButton = _isPortrait
+        ? (_screenWidth - _playerButtonDiameter) / 2
+        : _marginVinyl + _vinylSize + _leftMarginPlayerButton;
+
     _playerButtonDiameter = math.min(_playerButtonDiameter, 200);
+    _otherButtonsDiameter = _playerButtonDiameter * 0.321;
 
     return MultiBlocProvider(
       providers: [
@@ -64,6 +76,7 @@ class _MainPageState extends State<MainPage> {
         children: <Widget>[
           _buildVinyl(),
           _buildPlayerButton(),
+          ..._buildOtherButtons(),
         ],
       ),
       //   child: BlocBuilder<PlatinetteBloc, PlatinetteState>(
@@ -154,12 +167,8 @@ class _MainPageState extends State<MainPage> {
 
   Widget _buildPlayerButton() {
     return Positioned(
-      top: _isPortrait
-          ? _marginVinyl + _vinylSize + _leftMarginPlayerButton
-          : null,
-      left: _isPortrait
-          ? (_screenWidth - _playerButtonDiameter) / 2
-          : _marginVinyl + _vinylSize + _leftMarginPlayerButton,
+      top: _topPlayerButton,
+      left: _leftPlayerButton,
       child: UnconstrainedBox(
         child: LimitedBox(
           maxHeight: 200,
@@ -173,5 +182,38 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildOtherButtons() {
+    var _buttons = List<Widget>();
+    _buttons.add(Positioned(
+      top: _topPlayerButton != null
+          ? _topPlayerButton + _playerButtonDiameter / 2
+          : _screenHeight / 2 -
+              (_otherButtonsDiameter + _playerButtonDiameter / 2 + 28),
+      left: !_isPortrait
+          ? _leftPlayerButton - _otherButtonsDiameter / 2
+          : _leftPlayerButton - _otherButtonsDiameter - 20,
+      child: Container(
+        width: _otherButtonsDiameter,
+        height: _otherButtonsDiameter,
+        color: Colors.red,
+      ),
+    ));
+
+    _buttons.add(Positioned(
+      top: _topPlayerButton != null
+          ? _topPlayerButton + _playerButtonDiameter / 2
+          : _screenHeight / 2 + (_playerButtonDiameter / 2 + 28),
+      left: !_isPortrait
+          ? _leftPlayerButton - _otherButtonsDiameter / 2
+          : _leftPlayerButton + _playerButtonDiameter + 20,
+      child: Container(
+        width: _otherButtonsDiameter,
+        height: _otherButtonsDiameter,
+        color: Colors.yellow,
+      ),
+    ));
+    return _buttons;
   }
 }
