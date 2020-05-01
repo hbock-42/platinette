@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vinyl_viewer/blocs/player/player_bloc.dart';
+import 'package:vinyl_viewer/widgets/need_make_package/animated_rotation.dart';
 
 class PlayerButton extends StatefulWidget {
   final double diameter;
@@ -30,6 +31,7 @@ class _PlayerButtonState extends State<PlayerButton> {
   );
   static const double _textMargin = 10;
   double _middleCircleDiameter;
+  int _positionId = 0;
 
   @override
   void initState() {
@@ -76,17 +78,15 @@ class _PlayerButtonState extends State<PlayerButton> {
   }
 
   Widget _buildText(String text, int i) {
-    double sign = i == 0 ? -1 : 1;
     return Transform.rotate(
-      angle: i == 0 ? 0 : math.pi * 2 * i / 3 + math.pi,
+      angle: _getRotationNumbers(i),
       child: Transform.translate(
-        offset: Offset(
-            0,
-            sign *
-                ((widget.diameter / 2) -
-                    (_textStyle.fontSize / 2) -
-                    _textMargin +
-                    3)),
+        offset: _getTranslation(
+            i,
+            (widget.diameter / 2) -
+                (_textStyle.fontSize / 2) -
+                _textMargin +
+                3),
         child: Text(
           text,
           style: _textStyle,
@@ -130,25 +130,48 @@ class _PlayerButtonState extends State<PlayerButton> {
   }
 
   Widget _buildDot() {
-    return Transform.translate(
-      offset: Offset(0, -(_middleCircleDiameter / 2 - widget.dotDiameter / 2)),
-      child: SizedBox(
-        width: widget.dotDiameter,
-        height: widget.dotDiameter,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(widget.dotDiameter),
+    return AnimatedRotation(
+      duration: Duration(milliseconds: 500),
+      angle: math.pi * 2 * _positionId / 3 + math.pi,
+      child: Transform.translate(
+        offset: Offset(0, _middleCircleDiameter / 2 - widget.dotDiameter / 2),
+        child: SizedBox(
+          width: widget.dotDiameter,
+          height: widget.dotDiameter,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(widget.dotDiameter),
+            ),
           ),
         ),
       ),
     );
   }
 
+  double _getRotationNumbers(int positionId) {
+    return positionId == 0 ? 0 : math.pi * 2 * positionId / 3 + math.pi;
+  }
+
+  Offset _getTranslation(int positionId, double distance) {
+    double sign = positionId == 0 ? -1 : 1;
+    return Offset(0, sign * distance);
+  }
+
   void _onPlayerStateChange(BuildContext context, PlayerState state) {
     state.when(
       initial: () => {},
-      playing: (rpm) => {},
+      playing: (rpm) => {
+        setState(() {
+          if (rpm == 33) {
+            _positionId = 0;
+          } else if (rpm == 45) {
+            _positionId = 1;
+          } else if (rpm == 78) {
+            _positionId = 2;
+          }
+        })
+      },
       paused: () => {},
     );
   }
