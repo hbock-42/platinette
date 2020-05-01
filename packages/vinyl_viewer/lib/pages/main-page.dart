@@ -20,7 +20,7 @@ class MainPage extends StatelessWidget {
             create: (BuildContext context) => PlayerBloc()),
       ],
       // child: Container(),
-      child: PlayerButton(diameter: 300),
+      child: PlayerButton(diameter: 350, dotDiameter: 45),
       //   child: BlocBuilder<PlatinetteBloc, PlatinetteState>(
       //     builder: (BuildContext context, PlatinetteState state) {
       //       return Stack(

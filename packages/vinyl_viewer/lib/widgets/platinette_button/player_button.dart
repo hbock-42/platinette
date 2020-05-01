@@ -5,20 +5,36 @@ import 'package:vinyl_viewer/blocs/player/player_bloc.dart';
 
 class PlayerButton extends StatefulWidget {
   final double diameter;
+  final double dotDiameter;
 
-  const PlayerButton({Key key, this.diameter}) : super(key: key);
+  const PlayerButton({
+    Key key,
+    this.diameter,
+    this.dotDiameter,
+  }) : super(key: key);
   @override
   _PlayerButtonState createState() => _PlayerButtonState();
 }
 
 class _PlayerButtonState extends State<PlayerButton> {
-  static const TextStyle _textStyle =
-      TextStyle(color: Colors.white, fontSize: 50);
-  static const double _textMargin = 15;
+  static const Color _color1 = Color(0xFFECF0F0);
+  static TextStyle _textStyle = TextStyle(
+    color: Color(0xFFF4F8F8),
+    fontSize: 55,
+    shadows: [
+      Shadow(
+          color: Colors.black.withOpacity(0.4),
+          blurRadius: 3,
+          offset: const Offset(0, 1))
+    ],
+  );
+  static const double _textMargin = 10;
+  double _middleCircleDiameter;
 
   @override
   void initState() {
     assert(widget.diameter != null && widget.diameter >= 0);
+    assert(widget.dotDiameter != null && widget.dotDiameter >= 0);
     super.initState();
   }
 
@@ -32,6 +48,8 @@ class _PlayerButtonState extends State<PlayerButton> {
           _buildBackground(),
           ..._buildTexts(),
           _buildMiddleCircle(),
+          _buildDot(),
+          _buildInnerCirle(),
         ]),
       ),
     );
@@ -43,7 +61,7 @@ class _PlayerButtonState extends State<PlayerButton> {
       height: widget.diameter,
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.blue,
+            color: _color1,
             borderRadius: BorderRadius.circular(widget.diameter)),
       ),
     );
@@ -58,15 +76,17 @@ class _PlayerButtonState extends State<PlayerButton> {
   }
 
   Widget _buildText(String text, int i) {
+    double sign = i == 0 ? -1 : 1;
     return Transform.rotate(
-      angle: math.pi * 2 * i / 3,
+      angle: i == 0 ? 0 : math.pi * 2 * i / 3 + math.pi,
       child: Transform.translate(
         offset: Offset(
             0,
-            (widget.diameter / 2) -
-                (_textStyle.fontSize / 2) -
-                _textMargin +
-                3),
+            sign *
+                ((widget.diameter / 2) -
+                    (_textStyle.fontSize / 2) -
+                    _textMargin +
+                    3)),
         child: Text(
           text,
           style: _textStyle,
@@ -76,15 +96,51 @@ class _PlayerButtonState extends State<PlayerButton> {
   }
 
   Widget _buildMiddleCircle() {
-    double diameter =
+    _middleCircleDiameter =
         widget.diameter - (2 * _textStyle.fontSize + 4 * _textMargin) + 2 * 9;
+    return SizedBox(
+      width: _middleCircleDiameter,
+      height: _middleCircleDiameter,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(_middleCircleDiameter)),
+      ),
+    );
+  }
+
+  Widget _buildInnerCirle() {
+    double diameter = _middleCircleDiameter - widget.dotDiameter * 2;
     return SizedBox(
       width: diameter,
       height: diameter,
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(widget.diameter)),
+            color: _color1,
+            borderRadius: BorderRadius.circular(diameter),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 5,
+              )
+            ]),
+      ),
+    );
+  }
+
+  Widget _buildDot() {
+    return Transform.translate(
+      offset: Offset(0, -(_middleCircleDiameter / 2 - widget.dotDiameter / 2)),
+      child: SizedBox(
+        width: widget.dotDiameter,
+        height: widget.dotDiameter,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(widget.dotDiameter),
+          ),
+        ),
       ),
     );
   }
