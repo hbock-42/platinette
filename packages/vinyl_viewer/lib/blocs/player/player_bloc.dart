@@ -9,7 +9,9 @@ part 'player_event.dart';
 // part 'player_state.dart';
 
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
-  int _currentRpm = 33;
+  static const InitialRpm = 33;
+
+  int _currentRpm = InitialRpm;
   int get rpm => _currentRpm;
 
   @override
@@ -33,22 +35,23 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   }
 
   Stream<PlayerState> _pause() async* {
-    yield PlayerState.paused();
+    yield PlayerState.paused(_currentRpm);
   }
 
   Stream<PlayerState> _updateRpm(int rpm) async* {
     _currentRpm = rpm;
     if (this.state is Playing) {
       yield* _play();
-    } else if (!(this.state is Paused)) {
-      yield PlayerState.initial(rpm);
+    } else if (this.state is Paused) {
+      yield* _pause();
     }
   }
 }
 
 @freezed
 abstract class PlayerState with _$PlayerState {
-  const factory PlayerState.initial(@Default(33) int rpm) = Initial;
+  const factory PlayerState.initial([@Default(PlayerBloc.InitialRpm) int rpm]) =
+      Initial;
   const factory PlayerState.playing(int rpm) = Playing;
-  const factory PlayerState.paused() = Paused;
+  const factory PlayerState.paused(int rpm) = Paused;
 }

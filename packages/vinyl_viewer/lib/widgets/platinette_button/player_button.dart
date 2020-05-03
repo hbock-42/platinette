@@ -198,9 +198,9 @@ class _PlayerButtonState extends State<PlayerButton> {
 
   void _onPlayerStateChange(BuildContext context, PlayerState state) {
     state.when(
-      initial: (rpm) => {setState(() => _mapRpmToPositions(rpm))},
-      playing: (rpm) => {setState(() => _mapRpmToPositions(rpm))},
-      paused: () => {},
+      initial: (rpm) => setState(() => _mapRpmToPositions(rpm)),
+      playing: (rpm) => setState(() => _mapRpmToPositions(rpm)),
+      paused: (rpm) => setState(() => _mapRpmToPositions(rpm)),
     );
   }
 

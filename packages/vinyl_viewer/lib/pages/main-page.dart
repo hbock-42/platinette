@@ -135,9 +135,7 @@ class _MainPageState extends State<MainPage> {
       //     maxHeight: _vinylSize,
       child: AspectRatio(
         aspectRatio: 1,
-        child: Container(
-          color: Colors.blue,
-        ),
+        child: Image.asset("assets/images/vinyl.png"),
       ),
       // ),
       // ),
@@ -236,9 +234,9 @@ class _MainPageState extends State<MainPage> {
       _leftMarginPlayerButton = _screenWidth * 0.05;
       _playerButtonDiameter = _screenWidth * 0.2;
     } else {
-      _vinylSize = _isPlaying ? minSize * 1.3 : minSize * 0.75;
-      _marginVinyl = _isPlaying ? -minSize * 0.2 : minSize * 0.2;
-      _leftMarginPlayerButton = minSize * 0.1;
+      _vinylSize = _isPlaying ? minSize * 1.7 : minSize * 0.75;
+      _marginVinyl = _isPlaying ? -_vinylSize * 0.3 : minSize * 0.2;
+      _leftMarginPlayerButton = _isPlaying ? -minSize * 0.04 : minSize * 0.02;
       _playerButtonDiameter = minSize * 0.2;
       _distanceLittleButtonsToPlayerButton = _isPlaying ? 75 : 28;
     }
@@ -257,12 +255,8 @@ class _MainPageState extends State<MainPage> {
   void _onPlayerStateChange(BuildContext context, PlayerState state) {
     state.when(
       initial: (rpm) => {},
-      playing: (rpm) {
-        setState(() => {_isPlaying = true});
-      },
-      paused: () {
-        setState(() => {_isPlaying = false});
-      },
+      playing: (rpm) => setState(() => {_isPlaying = true}),
+      paused: (rpm) => setState(() => {_isPlaying = false}),
     );
   }
 }
