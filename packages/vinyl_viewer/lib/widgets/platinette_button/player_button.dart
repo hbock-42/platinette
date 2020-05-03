@@ -30,6 +30,7 @@ class _PlayerButtonState extends State<PlayerButton> {
           offset: const Offset(0, 1))
     ],
   );
+  TextStyle _selectTextStyle;
   double _textMargin;
   double _middleCircleDiameter;
   double _innerCircleDiameter;
@@ -76,6 +77,7 @@ class _PlayerButtonState extends State<PlayerButton> {
     _textStyle = _textStyle.copyWith(fontSize: _fontSize);
     _textMargin = 0.032 * widget.diameter;
     _playPauseHeight = widget.diameter * 0.2;
+    _selectTextStyle = _textStyle.copyWith(color: Colors.black);
   }
 
   Widget _buildBackground() {
@@ -107,9 +109,15 @@ class _PlayerButtonState extends State<PlayerButton> {
                 3),
         child: Listener(
           onPointerUp: (_) => onPointerUp(),
-          child: Text(
-            text,
-            style: _textStyle,
+          child: AnimatedDefaultTextStyle(
+            style: _positionId == i ? _selectTextStyle : _textStyle,
+            duration: _positionId == i
+                ? Duration(milliseconds: 200)
+                : Duration(milliseconds: 0),
+            curve: Curves.easeInOut,
+            child: Text(
+              text,
+            ),
           ),
         ),
       ),
@@ -171,8 +179,8 @@ class _PlayerButtonState extends State<PlayerButton> {
   Widget _buildPlayPauseButton() {
     var playerBloc = context.bloc<PlayerBloc>();
     return LottieButton(
-      // onClick1: () => playerBloc.add(Pause()),
-      // onClick2: () => playerBloc.add(Play()),
+      onClick1: () => playerBloc.add(Pause()),
+      onClick2: () => playerBloc.add(Play()),
       isFirstStatefirst: false,
       compositionPath: 'assets/animations/play_pause.json',
       height: _playPauseHeight,
