@@ -21,18 +21,66 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   Duration _animationDuration = Duration(milliseconds: 300);
   Curve _animationCurve = Curves.easeIn;
-  double _marginVinyl;
-  double _vinylSize;
-  double _leftMarginPlayerButton;
-  double _playerButtonDiameter;
-  double _otherButtonsDiameter;
+  // double _marginVinyl;
+  // double _vinylSize;
+  // double _leftMarginPlayerButton;
+  // double _playerButtonDiameter;
+  // double _otherButtonsDiameter;
+  // double _topPlayerButton;
+  // double _leftPlayerButton;
+
+  // bool _isMobile;
+  // double _distanceLittleButtonsToPlayerButton;
+
   double _screenWidth;
   double _screenHeight;
-  double _topPlayerButton;
-  double _leftPlayerButton;
-  bool _isPortrait;
   bool _isPlaying = false;
-  double _distanceLittleButtonsToPlayerButton;
+
+  double _marginLeftVinyl;
+  double _marginTopVinyl;
+  double _vinylSize;
+
+  double _marginLeftPlayerButton;
+  double _marginTopPlayerButton;
+  double _playerButtonSize;
+
+  double _littleButtonSize;
+  double _littleButtonsVerticalDistance;
+  double _littleButtonsHorizontalDistance;
+
+  // vinyl
+  double get _rigthVinyl => _isMobile ? null : _marginLeftVinyl + _vinylSize;
+  double get _topVinyl => _isMobile ? _marginTopVinyl : null;
+  double get _bottomVinyl => _isMobile ? _marginTopVinyl + _vinylSize : null;
+  double get _leftVinyl => _isMobile ? null : _marginLeftVinyl;
+
+  // play
+  double get _leftPlayerButton =>
+      _isMobile ? null : _rigthVinyl + _marginLeftPlayerButton;
+  double get _topPlayerButton =>
+      _isMobile ? _topVinyl + _marginTopPlayerButton : null;
+
+  // plus
+  double get _leftPlusButton =>
+      _isMobile ? null : _leftPlayerButton - _littleButtonsHorizontalDistance;
+  double get _topPlusButton => _isMobile
+      ? null
+      : ((_screenHeight - _playerButtonSize) / 2) -
+          _littleButtonSize -
+          _littleButtonsVerticalDistance;
+
+  // save
+  double get _leftSaveButton =>
+      _isMobile ? null : _leftPlayerButton - _littleButtonsHorizontalDistance;
+  double get _topSaveButton => _isMobile
+      ? null
+      : (_screenHeight + _playerButtonSize) / 2 +
+          _littleButtonsVerticalDistance;
+
+  bool get _isMobile => _screenWidth / _screenHeight < 3 / 4;
+  bool get _isMediumScreen =>
+      _screenWidth / _screenHeight >= 3 / 4 &&
+      _screenWidth / _screenHeight < 4 / 3;
 
   @override
   Widget build(BuildContext context) {
@@ -123,22 +171,18 @@ class _MainPageState extends State<MainPage> {
 
   Widget _buildVinyl() {
     return AnimatedPositioned(
-      top: _isPortrait ? _marginVinyl : null,
-      left: _isPortrait ? _screenWidth * 0.05 : _marginVinyl,
+      top: _topVinyl,
+      left: _leftVinyl,
       width: _vinylSize,
       height: _vinylSize,
       duration: _animationDuration,
       curve: _animationCurve,
-      // child: UnconstrainedBox(
-      //   child: LimitedBox(
-      //     maxWidth: _vinylSize,
-      //     maxHeight: _vinylSize,
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Image.asset("assets/images/vinyl.png"),
+      child: Image.asset(
+        "assets/images/vinyl.png",
+        width: _vinylSize,
+        height: _vinylSize,
+        fit: BoxFit.fill,
       ),
-      // ),
-      // ),
     );
   }
 
@@ -153,15 +197,15 @@ class _MainPageState extends State<MainPage> {
           maxHeight: 200,
           maxWidth: 200,
           child: Neumorphic(
-              boxShape: NeumorphicBoxShape.roundRect(
-                  borderRadius: BorderRadius.circular(_playerButtonDiameter)),
-              style: AppTheme.neumorphic,
-              child: AnimatedPlayerButton(
-                  duration: _animationDuration,
-                  diameterCurve: _animationCurve,
-                  colorCurve: _animationCurve,
-                  diameter: _playerButtonDiameter,
-                  color: AppTheme.whiteFake)),
+            boxShape: NeumorphicBoxShape.roundRect(
+                borderRadius: BorderRadius.circular(_playerButtonSize)),
+            style: AppTheme.neumorphic,
+            child: AnimatedPlayerButton(
+                duration: _animationDuration,
+                diameterCurve: _animationCurve,
+                diameter: _playerButtonSize,
+                color: AppTheme.whiteFake),
+          ),
         ),
       ),
     );
@@ -172,21 +216,14 @@ class _MainPageState extends State<MainPage> {
     _buttons.add(AnimatedPositioned(
       duration: _animationDuration,
       curve: _animationCurve,
-      top: _topPlayerButton != null
-          ? _topPlayerButton + _playerButtonDiameter / 2
-          : _screenHeight / 2 -
-              (_otherButtonsDiameter +
-                  _playerButtonDiameter / 2 +
-                  _distanceLittleButtonsToPlayerButton),
-      left: !_isPortrait
-          ? _leftPlayerButton - _otherButtonsDiameter / 2
-          : _leftPlayerButton - _otherButtonsDiameter - 20,
+      top: _topPlusButton,
+      left: _leftPlusButton,
       child: Container(
-        width: _otherButtonsDiameter,
-        height: _otherButtonsDiameter,
+        width: _littleButtonSize,
+        height: _littleButtonSize,
         child: Neumorphic(
           boxShape: NeumorphicBoxShape.roundRect(
-              borderRadius: BorderRadius.circular(_playerButtonDiameter)),
+              borderRadius: BorderRadius.circular(_littleButtonSize)),
           style: AppTheme.neumorphic,
         ),
       ),
@@ -195,61 +232,65 @@ class _MainPageState extends State<MainPage> {
     _buttons.add(AnimatedPositioned(
       duration: _animationDuration,
       curve: _animationCurve,
-      top: _topPlayerButton != null
-          ? _topPlayerButton + _playerButtonDiameter / 2
-          : _screenHeight / 2 +
-              (_playerButtonDiameter / 2 +
-                  _distanceLittleButtonsToPlayerButton),
-      left: !_isPortrait
-          ? _leftPlayerButton - _otherButtonsDiameter / 2
-          : _leftPlayerButton + _playerButtonDiameter + 20,
+      top: _topSaveButton,
+      left: _leftSaveButton,
       child: Container(
-        width: _otherButtonsDiameter,
-        height: _otherButtonsDiameter,
+        width: _littleButtonSize,
+        height: _littleButtonSize,
         child: Neumorphic(
           boxShape: NeumorphicBoxShape.roundRect(
-              borderRadius: BorderRadius.circular(_playerButtonDiameter)),
+              borderRadius: BorderRadius.circular(_littleButtonSize)),
           style: AppTheme.neumorphic,
         ),
       ),
     ));
+
     return _buttons;
+  }
+
+  double _maxMarginLeftPlayerButtonOnPlay() {
+    return _screenWidth - (_rigthVinyl + _playerButtonSize) - 25;
   }
 
   void _calculateSizes() {
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
-    var minSize = math.min(_screenHeight, _screenWidth);
-    _isPortrait = false;
-    _distanceLittleButtonsToPlayerButton = 0;
-    if (_screenWidth / _screenHeight < 3 / 4) {
-      _isPortrait = true;
-      _vinylSize = _screenWidth * 0.9;
-      _marginVinyl = _screenHeight * 0.05;
-      _leftMarginPlayerButton = _screenHeight * 0.05;
-      _playerButtonDiameter = _screenHeight * 0.2;
-    } else if (_screenWidth / _screenHeight < 4 / 3) {
-      _vinylSize = _screenWidth * 0.65;
-      _marginVinyl = _screenWidth * 0.05;
-      _leftMarginPlayerButton = _screenWidth * 0.05;
-      _playerButtonDiameter = _screenWidth * 0.2;
+
+    _vinylSize = 0;
+    _marginLeftVinyl = 0;
+    _marginTopVinyl = 0;
+
+    _marginLeftPlayerButton = 0;
+    _marginTopPlayerButton = 0;
+
+    _littleButtonSize = 0;
+
+    if (_isMobile) {
     } else {
-      _vinylSize = _isPlaying ? minSize * 1.7 : minSize * 0.75;
-      _marginVinyl = _isPlaying ? -_vinylSize * 0.3 : minSize * 0.2;
-      _leftMarginPlayerButton = _isPlaying ? -minSize * 0.04 : minSize * 0.02;
-      _playerButtonDiameter = minSize * 0.2;
-      _distanceLittleButtonsToPlayerButton = _isPlaying ? 75 : 28;
+      _calculeDesktopSizes();
+    }
+  }
+
+  void _calculeDesktopSizes() {
+    if (_isMediumScreen) {
+      _vinylSize = _isPlaying ? _screenHeight * 1.2 : _screenHeight * 0.7;
+    } else {
+      _vinylSize = _isPlaying ? _screenHeight * 1.6 : _screenHeight * 0.85;
     }
 
-    _topPlayerButton = _isPortrait
-        ? _marginVinyl + _vinylSize + _leftMarginPlayerButton
-        : null;
-    _leftPlayerButton = _isPortrait
-        ? (_screenWidth - _playerButtonDiameter) / 2
-        : _marginVinyl + _vinylSize + _leftMarginPlayerButton;
+    _marginLeftVinyl = _isPlaying ? -_vinylSize * 0.25 : _screenWidth * 0.1;
+    _playerButtonSize = _screenWidth * 0.2;
+    _playerButtonSize = math.min(200, _playerButtonSize);
+    _marginLeftPlayerButton =
+        _isPlaying ? _screenWidth * 0.095 : _screenWidth * 0.06;
+    _marginLeftPlayerButton =
+        math.min(_maxMarginLeftPlayerButtonOnPlay(), _marginLeftPlayerButton);
 
-    _playerButtonDiameter = math.min(_playerButtonDiameter, 200);
-    _otherButtonsDiameter = _playerButtonDiameter * 0.321;
+    _littleButtonSize = _playerButtonSize * 0.4;
+    _littleButtonsVerticalDistance =
+        _isPlaying ? _screenHeight * 0.15 : _screenHeight * 0.05;
+    _littleButtonsHorizontalDistance =
+        _isPlaying ? _littleButtonSize * 0.3 : _littleButtonSize * 0.75;
   }
 
   void _onPlayerStateChange(BuildContext context, PlayerState state) {

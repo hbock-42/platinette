@@ -5,7 +5,6 @@ import 'player_button.dart';
 class AnimatedPlayerButton extends StatefulWidget {
   final Duration duration;
   final Curve diameterCurve;
-  final Curve colorCurve;
   final double diameter;
   final Color color;
 
@@ -15,7 +14,6 @@ class AnimatedPlayerButton extends StatefulWidget {
     @required this.diameter,
     @required this.color,
     this.diameterCurve = Curves.linear,
-    this.colorCurve = Curves.linear,
   }) : super(key: key);
 
   @override
@@ -28,7 +26,6 @@ class _AnimatedPlayerButtonState extends State<AnimatedPlayerButton>
   Curve _diameterCurve;
   Curve _colorCurve;
   Animation _diameterAnimation;
-  Animation _colorAnimation;
 
   @override
   void initState() {
@@ -42,17 +39,9 @@ class _AnimatedPlayerButtonState extends State<AnimatedPlayerButton>
     } else {
       _diameterCurve = widget.diameterCurve;
     }
-    if (widget.colorCurve == null) {
-      _colorCurve = Curves.linear;
-    } else {
-      _colorCurve = widget.colorCurve;
-    }
-
     _controller = AnimationController(vsync: this, duration: widget.duration);
     _diameterAnimation = Tween(begin: widget.diameter, end: widget.diameter)
         .animate(_controller);
-    _colorAnimation =
-        Tween(begin: widget.color, end: widget.color).animate(_controller);
   }
 
   @override
@@ -63,17 +52,10 @@ class _AnimatedPlayerButtonState extends State<AnimatedPlayerButton>
 
   @override
   void didUpdateWidget(AnimatedPlayerButton oldWidget) {
-    if (oldWidget.diameter != widget.diameter ||
-        oldWidget.color != widget.color) {
-      if (oldWidget.diameter != widget.diameter) {
-        _diameterAnimation =
-            Tween(begin: oldWidget.diameter, end: widget.diameter).animate(
-                CurvedAnimation(parent: _controller, curve: _diameterCurve));
-      }
-      if (oldWidget.color != widget.color) {
-        _colorAnimation = Tween(begin: oldWidget.color, end: widget.color)
-            .animate(CurvedAnimation(parent: _controller, curve: _colorCurve));
-      }
+    if (oldWidget.diameter != widget.diameter) {
+      _diameterAnimation = Tween(
+              begin: oldWidget.diameter, end: widget.diameter)
+          .animate(CurvedAnimation(parent: _controller, curve: _diameterCurve));
       _controller.forward(from: 0);
     }
     super.didUpdateWidget(oldWidget);
@@ -86,7 +68,7 @@ class _AnimatedPlayerButtonState extends State<AnimatedPlayerButton>
       builder: (context, child) {
         return PlayerButton(
           diameter: _diameterAnimation.value,
-          color: _colorAnimation.value,
+          color: widget.color,
         );
       },
     );
