@@ -53,29 +53,49 @@ class _MainPageState extends State<MainPage> {
   double get _topVinyl => _isMobile ? _marginTopVinyl : null;
   double get _bottomVinyl => _isMobile ? _marginTopVinyl + _vinylSize : null;
   double get _leftVinyl => _isMobile ? null : _marginLeftVinyl;
+  double get _maxVinylSizeOnPlayMobile => _screenWidth * 1.5;
 
-  // play
+  // player
   double get _leftPlayerButton =>
       _isMobile ? null : _rigthVinyl + _marginLeftPlayerButton;
   double get _topPlayerButton =>
-      _isMobile ? _topVinyl + _marginTopPlayerButton : null;
+      _isMobile ? _bottomVinyl + _marginTopPlayerButton : null;
+  double get _maxMarginLeftPlayerButtonOnPlay =>
+      _screenWidth - (_rigthVinyl + _playerButtonSize) - 25;
+  double get _maxMarginTopPlayerButtonOnPlay =>
+      _screenHeight - (_bottomVinyl + _playerButtonSize) - 25;
 
   // plus
   double get _leftPlusButton =>
-      _isMobile ? null : _leftPlayerButton - _littleButtonsHorizontalDistance;
-  double get _topPlusButton => _isMobile
-      ? null
-      : ((_screenHeight - _playerButtonSize) / 2) -
-          _littleButtonSize -
-          _littleButtonsVerticalDistance;
+      _isMobile ? _leftPlusButtonMobile : _leftPlusButtonDesktop;
+  double get _leftPlusButtonDesktop =>
+      _leftPlayerButton - _littleButtonsHorizontalDistance;
+  double get _leftPlusButtonMobile =>
+      ((_screenWidth - _littleButtonSize) / 2) -
+      (_littleButtonSize + _littleButtonsHorizontalDistance);
+  double get _topPlusButton =>
+      _isMobile ? _topPlusButtonMobile : _topPlusButtonDesktop;
+  double get _topPlusButtonDesktop =>
+      ((_screenHeight - _playerButtonSize) / 2) -
+      _littleButtonSize -
+      _littleButtonsVerticalDistance;
+  double get _topPlusButtonMobile =>
+      _topPlayerButton - _littleButtonsVerticalDistance;
 
   // save
   double get _leftSaveButton =>
-      _isMobile ? null : _leftPlayerButton - _littleButtonsHorizontalDistance;
-  double get _topSaveButton => _isMobile
-      ? null
-      : (_screenHeight + _playerButtonSize) / 2 +
-          _littleButtonsVerticalDistance;
+      _isMobile ? _leftSaveButtonMobile : _leftSaveButtonDesktop;
+  double get _leftSaveButtonDesktop =>
+      _leftPlayerButton - _littleButtonsHorizontalDistance;
+  double get _leftSaveButtonMobile =>
+      ((_screenWidth - _littleButtonSize) / 2) +
+      (_littleButtonSize + _littleButtonsHorizontalDistance);
+  double get _topSaveButton =>
+      _isMobile ? _topSaveButtonMobile : _topSaveButtonDesktop;
+  double get _topSaveButtonDesktop =>
+      (_screenHeight + _playerButtonSize) / 2 + _littleButtonsVerticalDistance;
+  double get _topSaveButtonMobile =>
+      _topPlayerButton - _littleButtonsVerticalDistance;
 
   bool get _isMobile => _screenWidth / _screenHeight < 3 / 4;
   bool get _isMediumScreen =>
@@ -93,11 +113,10 @@ class _MainPageState extends State<MainPage> {
         BlocProvider<PlayerBloc>(
             create: (BuildContext context) => PlayerBloc()),
       ],
-      // child: Container(),
       child: BlocListener<PlayerBloc, PlayerState>(
         listener: _onPlayerStateChange,
         child: Stack(
-          alignment: Alignment.centerLeft,
+          alignment: _isMobile ? Alignment.topCenter : Alignment.centerLeft,
           children: <Widget>[
             _buildVinyl(),
             _buildPlayerButton(),
@@ -248,10 +267,6 @@ class _MainPageState extends State<MainPage> {
     return _buttons;
   }
 
-  double _maxMarginLeftPlayerButtonOnPlay() {
-    return _screenWidth - (_rigthVinyl + _playerButtonSize) - 25;
-  }
-
   void _calculateSizes() {
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
@@ -266,6 +281,7 @@ class _MainPageState extends State<MainPage> {
     _littleButtonSize = 0;
 
     if (_isMobile) {
+      _calculeMobileSizes();
     } else {
       _calculeDesktopSizes();
     }
@@ -284,13 +300,32 @@ class _MainPageState extends State<MainPage> {
     _marginLeftPlayerButton =
         _isPlaying ? _screenWidth * 0.095 : _screenWidth * 0.06;
     _marginLeftPlayerButton =
-        math.min(_maxMarginLeftPlayerButtonOnPlay(), _marginLeftPlayerButton);
+        math.min(_maxMarginLeftPlayerButtonOnPlay, _marginLeftPlayerButton);
 
     _littleButtonSize = _playerButtonSize * 0.4;
     _littleButtonsVerticalDistance =
         _isPlaying ? _screenHeight * 0.15 : _screenHeight * 0.05;
     _littleButtonsHorizontalDistance =
         _isPlaying ? _littleButtonSize * 0.3 : _littleButtonSize * 0.75;
+  }
+
+  void _calculeMobileSizes() {
+    _vinylSize = _isPlaying ? _screenHeight * 1.75 : _screenWidth * 0.8;
+    _vinylSize = math.min(_vinylSize, _maxVinylSizeOnPlayMobile);
+    _playerButtonSize = _screenHeight * 0.15;
+    _playerButtonSize = math.min(200, _playerButtonSize);
+
+    _marginTopVinyl = _isPlaying ? -_vinylSize * 0.25 : _screenHeight * 0.05;
+    _marginTopPlayerButton =
+        _isPlaying ? _screenHeight * 0.095 : _screenHeight * 0.06;
+    _marginTopPlayerButton =
+        math.min(_maxMarginTopPlayerButtonOnPlay, _marginTopPlayerButton);
+
+    _littleButtonSize = _playerButtonSize * 0.4;
+    _littleButtonsVerticalDistance =
+        _isPlaying ? _littleButtonSize * 0.3 : _littleButtonSize * 0.75;
+    _littleButtonsHorizontalDistance =
+        _isPlaying ? _screenWidth * 0.15 : _screenWidth * 0.05;
   }
 
   void _onPlayerStateChange(BuildContext context, PlayerState state) {
