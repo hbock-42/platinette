@@ -49,6 +49,7 @@ class _PlayerButtonState extends State<PlayerButton> {
   @override
   Widget build(BuildContext context) {
     _calculeSizes();
+    _mapRpmToPositions(context.bloc<PlayerBloc>().rpm);
 
     return BlocListener<PlayerBloc, PlayerState>(
       listener: _onPlayerStateChange,
