@@ -133,7 +133,7 @@ class _MainPageState extends State<MainPage> {
                 _buildVinyl(),
                 _buildMacaron(),
                 _buildPlayerButton(),
-                ..._buildOtherButtons(),
+                ..._buildOtherButtons(context),
               ],
             ),
           )),
@@ -255,20 +255,24 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  List<Widget> _buildOtherButtons() {
+  List<Widget> _buildOtherButtons(BuildContext context) {
+    var platinetteBloc = context.bloc<PlatinetteBloc>();
     var _buttons = List<Widget>();
     _buttons.add(AnimatedPositioned(
       duration: _animationDuration,
       curve: _animationCurve,
       top: _topPlusButton,
       left: _leftPlusButton,
-      child: Container(
-        width: _littleButtonSize,
-        height: _littleButtonSize,
-        child: Neumorphic(
-          boxShape: NeumorphicBoxShape.roundRect(
-              borderRadius: BorderRadius.circular(_littleButtonSize)),
-          style: AppTheme.neumorphic,
+      child: Listener(
+        onPointerUp: (_) => platinetteBloc.add(GetMacaron()),
+        child: Container(
+          width: _littleButtonSize,
+          height: _littleButtonSize,
+          child: Neumorphic(
+            boxShape: NeumorphicBoxShape.roundRect(
+                borderRadius: BorderRadius.circular(_littleButtonSize)),
+            style: AppTheme.neumorphic,
+          ),
         ),
       ),
     ));
@@ -278,13 +282,16 @@ class _MainPageState extends State<MainPage> {
       curve: _animationCurve,
       top: _topSaveButton,
       left: _leftSaveButton,
-      child: Container(
-        width: _littleButtonSize,
-        height: _littleButtonSize,
-        child: Neumorphic(
-          boxShape: NeumorphicBoxShape.roundRect(
-              borderRadius: BorderRadius.circular(_littleButtonSize)),
-          style: AppTheme.neumorphic,
+      child: Listener(
+        onPointerUp: (_) => platinetteBloc.add(Record()),
+        child: Container(
+          width: _littleButtonSize,
+          height: _littleButtonSize,
+          child: Neumorphic(
+            boxShape: NeumorphicBoxShape.roundRect(
+                borderRadius: BorderRadius.circular(_littleButtonSize)),
+            style: AppTheme.neumorphic,
+          ),
         ),
       ),
     ));
