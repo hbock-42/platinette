@@ -21,16 +21,6 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   Duration _animationDuration = Duration(milliseconds: 300);
   Curve _animationCurve = Curves.easeIn;
-  // double _marginVinyl;
-  // double _vinylSize;
-  // double _leftMarginPlayerButton;
-  // double _playerButtonDiameter;
-  // double _otherButtonsDiameter;
-  // double _topPlayerButton;
-  // double _leftPlayerButton;
-
-  // bool _isMobile;
-  // double _distanceLittleButtonsToPlayerButton;
 
   double _screenWidth;
   double _screenHeight;
@@ -51,24 +41,30 @@ class _MainPageState extends State<MainPage> {
   double _macaronSize;
 
   // vinyl
+  double get _halfVinylSize => _vinylSize / 2;
   double get _rigthVinyl => _isMobile ? null : _marginLeftVinyl + _vinylSize;
-  double get _topVinyl => _isMobile ? _marginTopVinyl : null;
+  double get _topVinyl =>
+      _isMobile ? _marginTopVinyl : _halfScreenHeight - _halfVinylSize;
   double get _bottomVinyl => _isMobile ? _marginTopVinyl + _vinylSize : null;
-  double get _leftVinyl => _isMobile ? null : _marginLeftVinyl;
+  double get _leftVinyl =>
+      _isMobile ? _halfScreenWidth - _halfVinylSize : _marginLeftVinyl;
   double get _maxVinylSizeOnPlayMobile => _screenWidth * 1.5;
-  double get _vinylCenterX => _isMobile ? null : _leftVinyl + _vinylSize / 2;
-  double get _vinylCenterY => _isMobile ? _topVinyl + _vinylSize / 2 : null;
+  double get _vinylCenterX => _leftVinyl + _halfVinylSize;
+  double get _vinylCenterY => _topVinyl + _halfVinylSize;
 
   // macaron
-  double get _leftMacaron =>
-      _isMobile ? null : _vinylCenterX - _macaronSize / 2;
-  double get _topMacaron => _isMobile ? _vinylCenterY - _macaronSize / 2 : null;
+  double get _halfMacaronSize => _macaronSize / 2;
+  double get _leftMacaron => _vinylCenterX - _halfMacaronSize;
+  double get _topMacaron => _vinylCenterY - _halfMacaronSize;
 
   // player
-  double get _leftPlayerButton =>
-      _isMobile ? null : _rigthVinyl + _marginLeftPlayerButton;
-  double get _topPlayerButton =>
-      _isMobile ? _bottomVinyl + _marginTopPlayerButton : null;
+  double get _halfPlayerButtonSize => _playerButtonSize / 2;
+  double get _leftPlayerButton => _isMobile
+      ? _halfScreenWidth - _halfPlayerButtonSize
+      : _rigthVinyl + _marginLeftPlayerButton;
+  double get _topPlayerButton => _isMobile
+      ? _bottomVinyl + _marginTopPlayerButton
+      : _halfScreenHeight - _halfPlayerButtonSize;
   double get _maxMarginLeftPlayerButtonOnPlay =>
       _screenWidth - (_rigthVinyl + _playerButtonSize) - 25;
   double get _maxMarginTopPlayerButtonOnPlay =>
@@ -110,6 +106,8 @@ class _MainPageState extends State<MainPage> {
   bool get _isMediumScreen =>
       _screenWidth / _screenHeight >= 3 / 4 &&
       _screenWidth / _screenHeight < 4 / 3;
+  double get _halfScreenHeight => _screenHeight / 2;
+  double get _halfScreenWidth => _screenWidth / 2;
 
   @override
   Widget build(BuildContext context) {
