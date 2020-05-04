@@ -48,12 +48,21 @@ class _MainPageState extends State<MainPage> {
   double _littleButtonsVerticalDistance;
   double _littleButtonsHorizontalDistance;
 
+  double _macaronSize;
+
   // vinyl
   double get _rigthVinyl => _isMobile ? null : _marginLeftVinyl + _vinylSize;
   double get _topVinyl => _isMobile ? _marginTopVinyl : null;
   double get _bottomVinyl => _isMobile ? _marginTopVinyl + _vinylSize : null;
   double get _leftVinyl => _isMobile ? null : _marginLeftVinyl;
   double get _maxVinylSizeOnPlayMobile => _screenWidth * 1.5;
+  double get _vinylCenterX => _isMobile ? null : _leftVinyl + _vinylSize / 2;
+  double get _vinylCenterY => _isMobile ? _topVinyl + _vinylSize / 2 : null;
+
+  // macaron
+  double get _leftMacaron =>
+      _isMobile ? null : _vinylCenterX - _macaronSize / 2;
+  double get _topMacaron => _isMobile ? _vinylCenterY - _macaronSize / 2 : null;
 
   // player
   double get _leftPlayerButton =>
@@ -113,17 +122,23 @@ class _MainPageState extends State<MainPage> {
         BlocProvider<PlayerBloc>(
             create: (BuildContext context) => PlayerBloc()),
       ],
-      child: BlocListener<PlayerBloc, PlayerState>(
-        listener: _onPlayerStateChange,
-        child: Stack(
-          alignment: _isMobile ? Alignment.topCenter : Alignment.centerLeft,
-          children: <Widget>[
-            _buildVinyl(),
-            _buildPlayerButton(),
-            ..._buildOtherButtons(),
+      child: MultiBlocListener(
+          listeners: [
+            BlocListener<PlayerBloc, PlayerState>(
+              listener: _onPlayerStateChange,
+            ),
           ],
-        ),
-      ),
+          child: BlocBuilder<PlatinetteBloc, PlatinetteState>(
+            builder: (context, state) => Stack(
+              alignment: _isMobile ? Alignment.topCenter : Alignment.centerLeft,
+              children: <Widget>[
+                _buildVinyl(),
+                _buildMacaron(),
+                _buildPlayerButton(),
+                ..._buildOtherButtons(),
+              ],
+            ),
+          )),
       //   child: BlocBuilder<PlatinetteBloc, PlatinetteState>(
       //     builder: (BuildContext context, PlatinetteState state) {
       //       return Stack(
@@ -202,6 +217,18 @@ class _MainPageState extends State<MainPage> {
         height: _vinylSize,
         fit: BoxFit.fill,
       ),
+    );
+  }
+
+  Widget _buildMacaron() {
+    return AnimatedPositioned(
+      duration: _animationDuration,
+      curve: _animationCurve,
+      left: _leftMacaron,
+      top: _topMacaron,
+      width: _macaronSize,
+      height: _macaronSize,
+      child: RecordableRotatingMacaron(),
     );
   }
 
@@ -285,6 +312,8 @@ class _MainPageState extends State<MainPage> {
     } else {
       _calculeDesktopSizes();
     }
+
+    _macaronSize = _vinylSize * 0.41;
   }
 
   void _calculeDesktopSizes() {

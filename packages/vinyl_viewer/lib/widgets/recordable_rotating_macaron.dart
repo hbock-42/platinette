@@ -64,7 +64,7 @@ class _RecordableRotatingMacaronState extends State<RecordableRotatingMacaron>
       child: BlocBuilder<PlatinetteBloc, PlatinetteState>(
         builder: (BuildContext context, PlatinetteState state) {
           if (state is PlatinetteInitial)
-            return Container(color: Colors.orange);
+            return Container(color: Colors.orange.withOpacity(0.4));
           if (state is PlatinettePickingFile && state.macaron != null) {
             return buildMacaron(context, state.macaron);
           }
